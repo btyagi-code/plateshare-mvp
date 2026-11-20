@@ -2,29 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
   <title>PlateShare: rescue campus surplus food</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Permanent+Marker&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="topbar">
-    <a href="#" class="brand"><span class="plate">🍽</span> PlateShare</a>
-    <nav id="nav">
-      <a href="#staff">Post food</a>
-      <a href="#browse">Find food</a>
-      <a href="#volunteer">Volunteer</a>
-      <a href="#impact">Impact</a>
-      <a href="#feedback" class="cta-link">Give feedback</a>
+    <a href="#" class="brand" aria-label="PlateShare home">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="#881c1c"/>
+        <circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-width="2"/>
+        <path d="M11 17.5c1.5 2 3 2.6 5 2.6s3.5-.6 5-2.6" fill="none" stroke="#f2e2ae" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      PlateShare
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#browse">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        Find food</a>
+      <a href="#staff">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Post food</a>
+      <a href="#volunteer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+        Pickups</a>
+      <a href="#impact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+        Impact</a>
     </nav>
+    <a href="#feedback" class="feedback-link" id="fb-link">Feedback</a>
   </header>
 
   <main id="view"></main>
 
   <footer class="foot">
-    <span>PlateShare MVP · UMass Amherst · Group 9</span>
-    <span>Demo data is saved in your browser only. <button id="reset" class="linkbtn">Reset demo</button></span>
+    <span>PlateShare MVP, UMass Amherst, Group 9</span>
+    <span>Demo data stays in this browser. <button id="reset" class="linkbtn">Reset demo</button></span>
   </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

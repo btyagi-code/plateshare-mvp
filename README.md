@@ -39,6 +39,17 @@ The dashboard grades each assumption against the evidence thresholds we set in W
 - Pulling UMass Dining menus automatically (a risk noted in Worksheet 3).
 - A food-safety sign-off flow agreed with UMass Dining.
 
+## Design
+
+The look is based on real kitchen food labels: each listing is a strip of masking tape written in marker, with a colored day sticker like the ones dining halls use to date food. Everything else is deliberately plain: steel grey, white, and UMass maroon. It avoids the usual signs of an AI-made site (Inter everywhere, cream backgrounds, rows of identical cards, emoji icons, filler copy).
+
+It's built for phones first:
+- a bottom tab bar within thumb reach
+- tap targets of at least 44px
+- the main button pinned at the bottom of forms
+- 16px form text, so iPhones don't zoom in
+- room for the iPhone home bar
+
 ## Files
 
 `index.html` (layout), `styles.css` (design), `app.js` (all logic: routing, state, pages, metrics)
