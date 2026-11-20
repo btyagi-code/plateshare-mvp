@@ -80,17 +80,21 @@
   }
 
   // ---------- router ----------
-  const routes = { "/": landing, "/staff": staff, "/browse": browse, "/volunteer": volunteer, "/impact": impact, "/feedback": feedback };
+  const routes = { "": landing, staff, browse, volunteer, impact, feedback };
   function render() {
     tick();
-    const path = location.hash.replace(/^#/, "") || "/";
+    const path = location.hash.replace(/^#/, "");
     (routes[path] || landing)();
-    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + path));
+    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + path && path));
     window.scrollTo(0, 0);
   }
   window.addEventListener("hashchange", render);
-  $("#reset").onclick = () => { if (confirm("Reset all demo data?")) { S = seed(); save(); render(); toast("Demo data reset"); } };
-  setInterval(() => { if (["/browse", "/volunteer"].includes(location.hash.slice(1))) refreshCountdowns(); }, 30e3);
+  $("#reset").onclick = e => {
+    const b = e.target;
+    if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "Click again to reset"; setTimeout(() => { delete b.dataset.armed; b.textContent = "Reset demo"; }, 3000); return; }
+    delete b.dataset.armed; b.textContent = "Reset demo"; S = seed(); save(); render(); toast("Demo data reset");
+  };
+  setInterval(() => { if (["browse", "volunteer"].includes(location.hash.slice(1))) refreshCountdowns(); }, 30e3);
   function refreshCountdowns() { document.querySelectorAll("[data-exp]").forEach(el => { el.textContent = left(+el.dataset.exp); el.classList.toggle("soon", +el.dataset.exp - now() < 30 * M); }); }
 
   // ---------- LANDING ----------
@@ -103,8 +107,8 @@
           <h1>Campus surplus food, <em>on someone's plate</em> instead of in the trash.</h1>
           <p class="lede">PlateShare connects UMass dining halls with the student orgs, pantries and shelters who need food, plus the volunteers who move it. Post in under two minutes, claim in one tap.</p>
           <div class="row">
-            <a class="btn" href="#/browse">See available food (${live})</a>
-            <a class="btn ghost" href="#/staff">I'm dining staff</a>
+            <a class="btn" href="#browse">See available food (${live})</a>
+            <a class="btn ghost" href="#staff">I'm dining staff</a>
           </div>
         </div>
         <div class="hero-card">
@@ -118,9 +122,9 @@
       </section>
 
       <div class="roles">
-        <a class="role" href="#/staff"><div class="ico">👩‍🍳</div><h3>Dining staff</h3><p>Post leftover food with a pickup window. It takes about as long as writing a sticky note.</p></a>
-        <a class="role" href="#/browse"><div class="ico">🥡</div><h3>Orgs, pantries & students</h3><p>See what's available, filter by dietary needs, and reserve it.</p></a>
-        <a class="role" href="#/volunteer"><div class="ico">🚲</div><h3>Volunteers</h3><p>Grab a pickup run and confirm it's delivered so everyone knows food is on its way.</p></a>
+        <a class="role" href="#staff"><div class="ico">👩‍🍳</div><h3>Dining staff</h3><p>Post leftover food with a pickup window. It takes about as long as writing a sticky note.</p></a>
+        <a class="role" href="#browse"><div class="ico">🥡</div><h3>Orgs, pantries & students</h3><p>See what's available, filter by dietary needs, and reserve it.</p></a>
+        <a class="role" href="#volunteer"><div class="ico">🚲</div><h3>Volunteers</h3><p>Grab a pickup run and confirm it's delivered so everyone knows food is on its way.</p></a>
       </div>
 
       <section class="section">
@@ -159,7 +163,7 @@
         <h2>Help us test this</h2>
         <p>We're validating PlateShare with UMass dining staff, food pantries and students. Two minutes of your feedback helps the most.</p>
         <div class="row">
-          <a class="btn maroon" href="#/feedback">Take the 2-minute survey</a>
+          <a class="btn maroon" href="#feedback">Take the 2-minute survey</a>
           <form id="sub" class="row" style="flex:1;min-width:260px">
             <input id="sub-email" type="email" required placeholder="Email for launch updates" style="flex:1">
             <button class="btn ghost">Subscribe</button>
@@ -352,13 +356,13 @@
       <section class="section panel">
         <h3>Survey responses: ${S.feedback.length} · Newsletter sign-ups: ${S.subscribers.length}</h3>
         ${S.feedback.length ? `<p class="hint">Average likelihood to use: <b>${(S.feedback.reduce((n, f) => n + +f.likely, 0) / S.feedback.length).toFixed(1)} / 5</b></p>` : `<p class="hint">No survey responses yet.</p>`}
-        <div class="row"><button class="btn small" id="csv-d">Export donations CSV</button><button class="btn small ghost" id="csv-f">Export survey CSV</button></div>
+        <div class="row"><button class="btn small" id="csv-d">Copy donations as CSV</button><button class="btn small ghost" id="csv-f">Copy survey as CSV</button><span class="hint">Paste into Google Sheets or Excel.</span></div>
       </section>`;
-    $("#csv-d").onclick = () => download("plateshare-donations.csv", toCSV(all.map(d => ({
+    $("#csv-d").onclick = () => copyCSV("Donations", toCSV(all.map(d => ({
       id: d.id, location: d.location, items: d.items.map(i => `${i.qty} ${i.unit} ${i.name}`).join("; "), status: d.status,
       posted: new Date(d.postedAt).toISOString(), window_end: new Date(d.expiresAt).toISOString(), post_seconds: d.postSeconds,
       reserved_by: d.reservedBy || "", picked_up: d.pickedUpAt ? new Date(d.pickedUpAt).toISOString() : "", volunteer: d.volunteer || "", est_servings: servings(d) }))));
-    $("#csv-f").onclick = () => download("plateshare-survey.csv", toCSV(S.feedback.map(f => ({ ...f, at: new Date(f.at).toISOString() }))));
+    $("#csv-f").onclick = () => copyCSV("Survey", toCSV(S.feedback.map(f => ({ ...f, at: new Date(f.at).toISOString() }))));
   }
   function toCSV(rows) {
     if (!rows.length) return "no data\n";
@@ -366,8 +370,9 @@
     const cell = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
     return [cols.join(","), ...rows.map(r => cols.map(c => cell(r[c])).join(","))].join("\n");
   }
-  function download(name, text) {
-    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); a.download = name; a.click();
+  async function copyCSV(what, text) {
+    try { await navigator.clipboard.writeText(text); toast(`${what} copied. Paste into a spreadsheet.`); }
+    catch { toast("Couldn't reach the clipboard in this browser"); }
   }
 
   // ---------- FEEDBACK survey (call to action) ----------
@@ -396,7 +401,7 @@
         comments: $("#comments").value.trim(), email: $("#fbemail").value.trim(), at: now() });
       save();
       $("#view").innerHTML = `<div class="panel" style="max-width:640px;text-align:center"><h1>Thank you! 🍽</h1>
-        <p>Your response was recorded. Want to see how the pilot is going?</p><a class="btn" href="#/impact">View the impact dashboard</a></div>`;
+        <p>Your response was recorded. Want to see how the pilot is going?</p><a class="btn" href="#impact">View the impact dashboard</a></div>`;
     };
   }
 

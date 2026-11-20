@@ -12,12 +12,12 @@ Data is stored in each visitor's browser (`localStorage`) and starts with sample
 
 | Page | User story |
 |---|---|
-| **Post food** (`#/staff`) | *As a dining staff member, I want to post surplus food with its quantity and pickup window so that it can be donated before it goes to waste.* The form times itself, so it measures how long posting really takes. |
-| **Find food** (`#/browse`) | *As a student org leader, I want to view and request available food…* and *As a student, I want to see the quantity and type of food so that I can assess that it meets my dietary needs.* Filter by location and diet (vegan, halal, gluten-free…), then reserve. |
-| **Volunteer** (`#/volunteer`) | *As a volunteer, I want to see pickup details and confirm a completed pickup so that the organization knows the food is on its way.* |
-| **Impact** (`#/impact`) | Tracks the assumptions from Worksheet 3 (see below) and exports CSVs. |
-| **Landing page** (`#/`) | Covers the gaps from Sprint Retro 2: a **unique value proposition** (comparison with Food Recovery Network and Too Good To Go), the **nonprofit business model**, and a clear **call to action**. |
-| **Feedback** (`#/feedback`) | A proper survey form instead of "scan the QR code," with role, a 1–5 likelihood scale, biggest blocker, and an interview opt-in. |
+| **Post food** (`#staff`) | *As a dining staff member, I want to post surplus food with its quantity and pickup window so that it can be donated before it goes to waste.* The form times itself, so it measures how long posting really takes. |
+| **Find food** (`#browse`) | *As a student org leader, I want to view and request available food…* and *As a student, I want to see the quantity and type of food so that I can assess that it meets my dietary needs.* Filter by location and diet (vegan, halal, gluten-free…), then reserve. |
+| **Volunteer** (`#volunteer`) | *As a volunteer, I want to see pickup details and confirm a completed pickup so that the organization knows the food is on its way.* |
+| **Impact** (`#impact`) | Tracks the assumptions from Worksheet 3 (see below) and exports CSVs. |
+| **Landing page** (`#`) | Covers the gaps from Sprint Retro 2: a **unique value proposition** (comparison with Food Recovery Network and Too Good To Go), the **nonprofit business model**, and a clear **call to action**. |
+| **Feedback** (`#feedback`) | A proper survey form instead of "scan the QR code," with role, a 1–5 likelihood scale, biggest blocker, and an interview opt-in. |
 
 ## Assumption tracker
 
